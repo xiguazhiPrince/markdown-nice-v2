@@ -41,7 +41,8 @@ export const markdownParserWechat = new MarkdownIt({
     const numbers = [];
     for (let i = 0; i < lines.length - 1; i++) {
       codeLines.push('<code><span class="code-snippet_outer">' + (lines[i] || "<br>") + "</span></code>");
-      numbers.push("<li></li>");
+      // 行号必须是真实文本：微信不支持 CSS 计数器，且 juice 会把 content: counter(line) 实体化成字面量
+      numbers.push("<li>" + (i + 1) + "</li>");
     }
     return (
       '<section class="code-snippet__fix code-snippet__js">' +
