@@ -38,17 +38,13 @@ export const markdownParserWechat = new MarkdownIt({
     const text = str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
     const lines = text.split("\n");
     const codeLines = [];
-    const numbers = [];
     for (let i = 0; i < lines.length - 1; i++) {
       codeLines.push('<code><span class="code-snippet_outer">' + (lines[i] || "<br>") + "</span></code>");
-      // 行号必须是真实文本：微信不支持 CSS 计数器，且 juice 会把 content: counter(line) 实体化成字面量
-      numbers.push("<li>" + (i + 1) + "</li>");
     }
+    // 不做行号栏：公众号编辑器会把 <ul>/<li> 拆平成一行文本（表现为首行出现 123456789），
+    // 而 CSS 计数器既不被公众号支持、又会被 juice 实体化成 ounter(line 字面量
     return (
       '<section class="code-snippet__fix code-snippet__js">' +
-      '<ul class="code-snippet__line-index code-snippet__js">' +
-      numbers.join("") +
-      "</ul>" +
       '<pre class="code-snippet__js" data-lang="' +
       lang +
       '">' +

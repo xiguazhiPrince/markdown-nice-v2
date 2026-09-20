@@ -277,25 +277,9 @@ export default `/*默认样式，最佳实践*/
   margin-bottom: 10px;
   margin-top: 0px;
 }
-#nice .code-snippet__fix .code-snippet__line-index {
-  flex-shrink: 0;
-  height: 100%;
-  padding: 1em;
-  list-style-type: none;
-  padding: 16px;
-  margin: 0;
-}
-#nice .code-snippet__fix .code-snippet__line-index li {
-  list-style-type: none;
-  text-align: right;
-  line-height: 26px;
-  color: rgba(0,0,0,0.3);
-  margin: 0;
-}
 #nice .code-snippet__fix pre {
   overflow-x: auto;
   padding: 16px;
-  padding-left: 0;
   white-space: normal;
   flex: 1;
   -webkit-overflow-scrolling: touch;
