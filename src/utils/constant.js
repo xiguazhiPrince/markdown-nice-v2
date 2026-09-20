@@ -81,6 +81,12 @@ export const TEMPLATE_OPTIONS = [
     isNew: true,
   },
   {
+    id: "warmWhite",
+    name: "暖白",
+    author: "自定义",
+    isNew: true,
+  },
+  {
     id: "orangeHeart",
     name: "橙心",
     author: "zhning12",
