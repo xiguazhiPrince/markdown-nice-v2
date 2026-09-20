@@ -1,4 +1,3 @@
-export const SM_MS_PROXY = "https://cors-anywhere.herokuapp.com/https://sm.ms/api/upload";
 export const MJX_DATA_FORMULA = "data-formula";
 export const MJX_DATA_FORMULA_TYPE = "data-formula-type";
 
@@ -8,21 +7,14 @@ export const TEMPLATE_NUM = "template_num";
 export const CODE_NUM = "code_num";
 export const PREVIEW_TYPE = "preview_type";
 export const IS_SYNC_SCROLL = "is_sync_scroll";
-export const IS_CONTAIN_IMG_NAME = "is_contain_img_name";
 export const IS_MAC_CODE = "is_mac_code";
 export const NEWEST_VERSION = "newest_version";
-export const ALIOSS_IMAGE_HOSTING = "alioss_image_hosting";
-export const IMAGE_HOSTING_TYPE = "image_hosting_type";
 export const BASIC_THEME_ID = "basic-theme";
 export const CODE_THEME_ID = "code-theme";
 export const MARKDOWN_THEME_ID = "markdown-theme";
 export const FONT_THEME_ID = "font-theme";
 export const LAYOUT_ID = "nice";
 export const BOX_ID = "nice-rich-text-box";
-export const IMAGE_HOSTING_NAMES = {
-  smms: "SM.MS",
-  aliyun: "阿里云",
-};
 
 export const RIGHT_SYMBOL = "✔️";
 export const EXPORT_FILENAME_SUFFIX = ".md";

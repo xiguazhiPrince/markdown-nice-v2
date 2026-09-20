@@ -6,7 +6,6 @@ import {
   CODE_OPTIONS,
   PREVIEW_TYPE,
   IS_SYNC_SCROLL,
-  IS_CONTAIN_IMG_NAME,
   IS_MAC_CODE,
 } from "../utils/constant";
 import TEMPLATE from "../template/index";
@@ -15,9 +14,6 @@ import {replaceStyle} from "../utils/helper";
 class Navbar {
   // 是否同步滚动
   @observable isSyncScroll = true;
-
-  // 是否保留图片名称
-  @observable isContainImgName = false;
 
   // 主题序号
   @observable templateNum;
@@ -35,12 +31,6 @@ class Navbar {
   setSyncScroll = (isSyncScroll) => {
     this.isSyncScroll = isSyncScroll;
     window.localStorage.setItem(IS_SYNC_SCROLL, isSyncScroll);
-  };
-
-  @action
-  setContainImgName = (isContainImgName) => {
-    this.isContainImgName = isContainImgName;
-    window.localStorage.setItem(IS_CONTAIN_IMG_NAME, isContainImgName);
   };
 
   @action
@@ -99,10 +89,6 @@ if (!window.localStorage.getItem(IS_SYNC_SCROLL)) {
   window.localStorage.setItem(IS_SYNC_SCROLL, true);
 }
 
-if (!window.localStorage.getItem(IS_CONTAIN_IMG_NAME)) {
-  window.localStorage.setItem(IS_CONTAIN_IMG_NAME, false);
-}
-
 if (!window.localStorage.getItem(IS_MAC_CODE)) {
   window.localStorage.setItem(IS_MAC_CODE, true);
 }
@@ -112,7 +98,6 @@ store.templateNum = parseInt(window.localStorage.getItem(TEMPLATE_NUM), 10);
 store.codeNum = parseInt(window.localStorage.getItem(CODE_NUM), 10);
 store.previewType = window.localStorage.getItem(PREVIEW_TYPE);
 store.isSyncScroll = window.localStorage.getItem(IS_SYNC_SCROLL) === "true";
-store.isContainImgName = window.localStorage.getItem(IS_CONTAIN_IMG_NAME) === "true";
 store.isMacCode = window.localStorage.getItem(IS_MAC_CODE) === "true";
 
 // 初始化代码主题

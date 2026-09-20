@@ -4,7 +4,6 @@ import Copy from "./Copy";
 import Down from "./Down";
 import Environment from "./Environment";
 import GitHub from "./GitHub";
-import Inbox from "./Inbox";
 import More from "./More";
 import Rabbit from "./Rabbit";
 import Smile from "./Smile";
@@ -28,8 +27,6 @@ export default (props) => {
       return <Environment {...props} />;
     case "github":
       return <GitHub {...props} />;
-    case "inbox":
-      return <Inbox {...props} />;
     case "more":
       return <More {...props} />;
     case "rabbit":

@@ -2,7 +2,6 @@ import React, {Component} from "react";
 import {Menu, Dropdown} from "antd";
 
 import SyncScroll from "./Setting/SyncScroll";
-import ContainImgName from "./Setting/ContainImgName";
 
 import "./common.css";
 
@@ -10,9 +9,6 @@ const menu = (
   <Menu>
     <Menu.Item>
       <SyncScroll />
-    </Menu.Item>
-    <Menu.Item>
-      <ContainImgName />
     </Menu.Item>
   </Menu>
 );

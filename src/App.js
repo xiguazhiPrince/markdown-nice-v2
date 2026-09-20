@@ -17,25 +17,16 @@ import SearchBox from "./component/SearchBox";
 import "./App.css";
 import "./utils/mdMirror.css";
 
-import {
-  LAYOUT_ID,
-  BOX_ID,
-  IMAGE_HOSTING_NAMES,
-  IMAGE_HOSTING_TYPE,
-  MJX_DATA_FORMULA,
-  MJX_DATA_FORMULA_TYPE,
-} from "./utils/constant";
+import {LAYOUT_ID, BOX_ID, MJX_DATA_FORMULA, MJX_DATA_FORMULA_TYPE} from "./utils/constant";
 import {markdownParser, markdownParserWechat, updateMathjax} from "./utils/helper";
 import pluginCenter from "./utils/pluginCenter";
 import appContext from "./utils/appContext";
-import {uploadAdaptor} from "./utils/imageHosting";
 import bindHotkeys, {betterTab, rightClick} from "./utils/hotkey";
 
 @inject("content")
 @inject("navbar")
 @inject("view")
 @inject("dialog")
-@inject("imageHosting")
 @observer
 class App extends Component {
   constructor(props) {
@@ -82,7 +73,6 @@ class App extends Component {
       console.log(e);
     }
     this.setEditorContent();
-    this.setCustomImageHosting();
   }
 
   componentDidUpdate() {
@@ -97,38 +87,6 @@ class App extends Component {
     document.removeEventListener("mozfullscreenchange", this.solveScreenChange);
     document.removeEventListener("MSFullscreenChange", this.solveScreenChange);
   }
-
-  setCustomImageHosting = () => {
-    if (this.props.useImageHosting === undefined) {
-      return;
-    }
-    const {url, name, isSmmsOpen, isAliyunOpen} = this.props.useImageHosting;
-    if (name) {
-      this.props.imageHosting.setHostingUrl(url);
-      this.props.imageHosting.setHostingName(name);
-      this.props.imageHosting.addImageHosting(name);
-    }
-    if (isSmmsOpen) {
-      this.props.imageHosting.addImageHosting(IMAGE_HOSTING_NAMES.smms);
-    }
-    if (isAliyunOpen) {
-      this.props.imageHosting.addImageHosting(IMAGE_HOSTING_NAMES.aliyun);
-    }
-
-    // 第一次进入没有默认图床时
-    if (window.localStorage.getItem(IMAGE_HOSTING_TYPE) === null) {
-      let type;
-      if (name) {
-        type = name;
-      } else if (isSmmsOpen) {
-        type = IMAGE_HOSTING_NAMES.smms;
-      } else if (isAliyunOpen) {
-        type = IMAGE_HOSTING_NAMES.aliyun;
-      }
-      this.props.imageHosting.setType(type);
-      window.localStorage.setItem(IMAGE_HOSTING_TYPE, type);
-    }
-  };
 
   setEditorContent = () => {
     const {defaultText} = this.props;
@@ -192,26 +150,6 @@ class App extends Component {
           cm.showHint(e);
         }
       });
-    }
-  };
-
-  handleDrop = (instance, e) => {
-    // e.preventDefault();
-    // console.log(e.dataTransfer.files[0]);
-    if (!(e.dataTransfer && e.dataTransfer.files)) {
-      return;
-    }
-    for (let i = 0; i < e.dataTransfer.files.length; i++) {
-      // console.log(e.dataTransfer.files[i]);
-      uploadAdaptor({file: e.dataTransfer.files[i], content: this.props.content});
-    }
-  };
-
-  handlePaste = (instance, e) => {
-    if (e.clipboardData && e.clipboardData.files) {
-      for (let i = 0; i < e.clipboardData.files.length; i++) {
-        uploadAdaptor({file: e.clipboardData.files[i], content: this.props.content});
-      }
     }
   };
 
@@ -288,8 +226,6 @@ class App extends Component {
                   onScroll={this.handleScroll}
                   onFocus={this.handleFocus}
                   onBlur={this.handleBlur}
-                  onDrop={this.handleDrop}
-                  onPaste={this.handlePaste}
                   ref={this.getInstance}
                 />
               </div>

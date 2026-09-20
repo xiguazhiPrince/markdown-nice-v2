@@ -9,7 +9,6 @@ import "./Wechat.css";
 
 @inject("content")
 @inject("navbar")
-@inject("imageHosting")
 @inject("dialog")
 @observer
 class Wechat extends Component {

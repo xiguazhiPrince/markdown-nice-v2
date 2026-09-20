@@ -9,7 +9,6 @@ import "./Juejin.css";
 
 @inject("content")
 @inject("navbar")
-@inject("imageHosting")
 @inject("dialog")
 @observer
 class Juejin extends Component {

@@ -9,7 +9,6 @@ import "./Zhihu.css";
 
 @inject("content")
 @inject("navbar")
-@inject("imageHosting")
 @inject("dialog")
 @observer
 class Zhihu extends Component {

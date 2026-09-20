@@ -21,15 +21,6 @@ export interface MarkdownNiceProps {
    * 编辑器内容监听函数
    */
   onTextChange?: (text: string) => void;
-  /**
-   * 是否启用用户提供的图床, 内部为图床的URL以及要显示的图床名称。
-   */
-  useImageHosting?: {
-    url: string;
-    name: string;
-    isSmmsOpen: boolean;
-    isAliyunOpen: boolean;
-  };
 }
 
 declare class MarkdownNice extends React.Component<MarkdownNiceProps, any> {}

@@ -1,8 +1,6 @@
 import {observable, action} from "mobx";
 
 class Dialog {
-  @observable isImageOpen = false;
-
   @observable isLinkOpen = false;
 
   @observable isAboutOpen = false;
@@ -14,11 +12,6 @@ class Dialog {
   @observable isSearchOpen = false;
 
   @observable isSitDownOpen = false;
-
-  @action
-  setImageOpen = (isImageOpen) => {
-    this.isImageOpen = isImageOpen;
-  };
 
   @action
   setLinkOpen = (isLinkOpen) => {

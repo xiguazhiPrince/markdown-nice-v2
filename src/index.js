@@ -4,15 +4,7 @@ import ReactDOM from "react-dom";
 import Lib from "./Lib";
 import * as serviceWorker from "./serviceWorker";
 
-ReactDOM.render(
-  <Lib
-    useImageHosting={{
-      isAliyunOpen: true,
-    }}
-    defaultTitle="Markdown Nice"
-  />,
-  document.getElementById("root"),
-);
+ReactDOM.render(<Lib defaultTitle="Markdown Nice" />, document.getElementById("root"));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

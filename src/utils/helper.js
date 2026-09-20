@@ -121,38 +121,6 @@ export const replaceStyle = (id, css) => {
   head.appendChild(style);
 };
 
-export const b64toBlob = (b64Data, contentType = "", sliceSize = 512) => {
-  const byteCharacters = atob(b64Data);
-  const byteArrays = [];
-
-  for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-    const slice = byteCharacters.slice(offset, offset + sliceSize);
-
-    const byteNumbers = new Array(slice.length);
-    for (let i = 0; i < slice.length; i++) {
-      byteNumbers[i] = slice.charCodeAt(i);
-    }
-
-    const byteArray = new Uint8Array(byteNumbers);
-
-    byteArrays.push(byteArray);
-  }
-
-  const blob = new Blob(byteArrays, {type: contentType});
-  return blob;
-};
-
-// base64转blob
-export const toBlob = (base64, fileType) => {
-  const bytes = window.atob(base64);
-  let n = bytes.length;
-  const u8arr = new Uint8Array(n);
-  while (n--) {
-    u8arr[n] = bytes.charCodeAt(n);
-  }
-  return new Blob([u8arr], {type: fileType});
-};
-
 export const dateFormat = (date, fmt) => {
   var o = {
     "M+": date.getMonth() + 1, // 月份
@@ -221,18 +189,6 @@ export const isPC = () => {
     }
   }
   return flag;
-};
-
-export const getOSSName = (originName, namespace = "") => {
-  const names = originName.split(".");
-  let key = "";
-  if (names.length > 1) {
-    const suffix = names.pop();
-    key = `${names.join(".")}_${dateFormat(new Date(), "yyyyMMddhhmmss")}.${suffix}`;
-  } else {
-    key = originName + "_" + dateFormat(new Date(), "yyyyMMddhhmmss");
-  }
-  return `${namespace}${key}`;
 };
 
 export const addStyleLabel = (styleLabels) => {

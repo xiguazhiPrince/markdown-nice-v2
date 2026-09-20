@@ -67,9 +67,6 @@ const bindHotkeys = (content, dialog) =>
         "Ctrl-K": () => {
           dialog.setLinkOpen(true);
         },
-        "Ctrl-Alt-I": () => {
-          dialog.setImageOpen(true);
-        },
         "Ctrl-Alt-T": () => {
           dialog.setFormOpen(true);
         },
@@ -114,9 +111,6 @@ const bindHotkeys = (content, dialog) =>
         "Cmd-K": () => {
           dialog.setLinkOpen(true);
         },
-        "Cmd-Alt-I": () => {
-          dialog.setImageOpen(true);
-        },
         "Cmd-Alt-T": () => {
           dialog.setFormOpen(true);
         },
@@ -142,7 +136,6 @@ export const hotKeys = isPlatformWindows
       code: "Ctrl+Alt+C",
       inlineCode: "Ctrl+Alt+V",
       link: "Ctrl+K",
-      image: "Ctrl+Alt+I",
       form: "Ctrl+Alt+T",
       format: "Ctrl+Alt+F",
       linkToFoot: "Ctrl+Alt+L",
@@ -155,7 +148,6 @@ export const hotKeys = isPlatformWindows
       code: "⌥⌘C",
       inlineCode: "⌥⌘V",
       link: "⌘K",
-      image: "⌥⌘I",
       form: "⌥⌘T",
       format: "⌥⌘F",
       linkToFoot: "⌥⌘L",

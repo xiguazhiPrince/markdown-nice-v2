@@ -10,7 +10,6 @@ import App from "./App";
 import content from "./store/content";
 import navbar from "./store/navbar";
 import dialog from "./store/dialog";
-import imageHosting from "./store/imageHosting";
 import view from "./store/view";
 
 import {isPC} from "./utils/helper";
@@ -39,16 +38,15 @@ class Lib extends Component {
   }
 
   render() {
-    const {defaultTitle, defaultText, onTextChange, useImageHosting} = this.props;
+    const {defaultTitle, defaultText, onTextChange} = this.props;
     const appCtx = {
       defaultTitle,
-      useImageHosting,
     };
     return (
-      <Provider content={content} navbar={navbar} dialog={dialog} imageHosting={imageHosting} view={view}>
+      <Provider content={content} navbar={navbar} dialog={dialog} view={view}>
         {isPC() ? (
           <appContext.Provider value={appCtx}>
-            <App defaultText={defaultText} onTextChange={onTextChange} useImageHosting={useImageHosting} />
+            <App defaultText={defaultText} onTextChange={onTextChange} />
           </appContext.Provider>
         ) : (
           <Result
@@ -73,25 +71,11 @@ Lib.defaultProps = {
   defaultTitle: "",
   defaultText: "",
   onTextChange: () => {},
-  // eslint-disable-next-line react/default-props-match-prop-types
-  useImageHosting: {
-    url: "",
-    name: "",
-    isSmmsOpen: false,
-    isAliyunOpen: true,
-  },
 };
 Lib.propTypes = {
   defaultTitle: PropTypes.string,
   defaultText: PropTypes.string,
   onTextChange: PropTypes.func,
-  // eslint-disable-next-line react/require-default-props
-  useImageHosting: PropTypes.shape({
-    url: PropTypes.string,
-    name: PropTypes.string,
-    isSmmsOpen: PropTypes.bool,
-    isAliyunOpen: PropTypes.bool,
-  }),
 };
 
 export default Lib;
