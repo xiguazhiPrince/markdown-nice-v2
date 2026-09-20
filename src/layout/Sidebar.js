@@ -8,7 +8,6 @@ import Zhihu from "../component/Sidebar/Zhihu";
 import Juejin from "../component/Sidebar/Juejin";
 import "./Sidebar.css";
 
-// @inject("userInfo")
 @inject("view")
 @observer
 class Sidebar extends Component {

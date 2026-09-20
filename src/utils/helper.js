@@ -1,4 +1,3 @@
-import axios from "axios";
 import MarkdownIt from "markdown-it";
 import markdownItMath from "./markdown-it-math";
 import markdownItDeflist from "markdown-it-deflist";
@@ -11,25 +10,6 @@ import markdownItLinkfoot from "./markdown-it-linkfoot";
 import markdownItImageFlow from "./markdown-it-imageflow";
 import highlightjs from "./langHighlight";
 import markdownItLiReplacer from "./markdown-it-li";
-
-export const axiosGithub = axios.create({
-  baseURL: "https://api.github.com",
-  headers: {
-    Accept: "application/json",
-  },
-});
-
-export const axiosJSON = axios.create({
-  headers: {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-  },
-});
-
-export const axiosMdnice = axios.create({
-  // baseURL: process.env.NODE_ENV === "development" ? "http://localhost:8081" : "https://math.mdnice.com",
-  baseURL: process.env.NODE_ENV === "development" ? "https://math.mdnice.com" : "https://math.mdnice.com",
-});
 
 export const queryParse = (search = window.location.search) => {
   if (!search) return {};

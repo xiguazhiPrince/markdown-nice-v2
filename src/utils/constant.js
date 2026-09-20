@@ -1,12 +1,4 @@
-export const CLIENT_ID = process.env.NODE_ENV === "development" ? "e791aa2a7a64b3f766a2" : "b3a3c46bd66318367efa";
-export const CLIENT_SECRET =
-  process.env.NODE_ENV === "development"
-    ? "e80cde65c7071286086077892f3336bc2a3f4576"
-    : "dfd9fdc1da6a6b10e473280bf0a379513f1d154d";
-
-export const PROXY = "https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token";
 export const SM_MS_PROXY = "https://cors-anywhere.herokuapp.com/https://sm.ms/api/upload";
-export const ACCESS_TOKEN = "ACCESS_TOKEN";
 export const MJX_DATA_FORMULA = "data-formula";
 export const MJX_DATA_FORMULA_TYPE = "data-formula-type";
 
@@ -20,7 +12,6 @@ export const IS_CONTAIN_IMG_NAME = "is_contain_img_name";
 export const IS_MAC_CODE = "is_mac_code";
 export const NEWEST_VERSION = "newest_version";
 export const ALIOSS_IMAGE_HOSTING = "alioss_image_hosting";
-export const QINIUOSS_IMAGE_HOSTING = "qiniuoss_image_hosting";
 export const IMAGE_HOSTING_TYPE = "image_hosting_type";
 export const BASIC_THEME_ID = "basic-theme";
 export const CODE_THEME_ID = "code-theme";
@@ -31,7 +22,6 @@ export const BOX_ID = "nice-rich-text-box";
 export const IMAGE_HOSTING_NAMES = {
   smms: "SM.MS",
   aliyun: "阿里云",
-  qiniuyun: "七牛云",
 };
 
 export const RIGHT_SYMBOL = "✔️";

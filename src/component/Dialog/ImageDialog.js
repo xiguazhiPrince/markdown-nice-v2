@@ -5,7 +5,6 @@ import {Modal, Upload, Tabs, Select} from "antd";
 import SvgIcon from "../../icon";
 
 import AliOSS from "../ImageHosting/AliOSS";
-import QiniuOSS from "../ImageHosting/QiniuOSS";
 
 import {uploadAdaptor} from "../../utils/imageHosting";
 import {SM_MS_PROXY, IMAGE_HOSTING_TYPE, IMAGE_HOSTING_NAMES} from "../../utils/constant";
@@ -71,11 +70,6 @@ class ImageDialog extends Component {
       // const configAli = JSON.parse(window.localStorage.getItem(ALIOSS_IMAGE_HOSTING));
       uploadAdaptor({file, onSuccess, onError, images});
     }
-    // 使用七牛云图床
-    else if (this.props.imageHosting.type === "七牛云") {
-      // const config = JSON.parse(window.localStorage.getItem(QINIUOSS_IMAGE_HOSTING));
-      uploadAdaptor({file, onSuccess, onError, onProgress, images});
-    }
     // 使用SM.MS图床
     else if (this.props.imageHosting.type === "SM.MS") {
       uploadAdaptor({formData, file, action, onProgress, onSuccess, onError, headers, withCredentials});
@@ -138,11 +132,6 @@ class ImageDialog extends Component {
               {useImageHosting.isAliyunOpen ? (
                 <TabPane tab={IMAGE_HOSTING_NAMES.aliyun} key="2">
                   <AliOSS />
-                </TabPane>
-              ) : null}
-              {useImageHosting.isQiniuyunOpen ? (
-                <TabPane tab={IMAGE_HOSTING_NAMES.qiniuyun} key="3">
-                  <QiniuOSS />
                 </TabPane>
               ) : null}
             </Tabs>

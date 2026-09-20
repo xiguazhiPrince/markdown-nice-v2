@@ -7,10 +7,6 @@ import * as serviceWorker from "./serviceWorker";
 ReactDOM.render(
   <Lib
     useImageHosting={{
-      url: "https://imgkr.com/api/files/upload",
-      name: "图壳",
-      isSmmsOpen: true,
-      isQiniuyunOpen: true,
       isAliyunOpen: true,
     }}
     defaultTitle="Markdown Nice"

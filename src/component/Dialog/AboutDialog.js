@@ -13,11 +13,6 @@ class AboutDialog extends Component {
     this.props.dialog.setAboutOpen(false);
   };
 
-  handleVersion = () => {
-    this.props.dialog.setAboutOpen(false);
-    this.props.dialog.setVersionOpen(true);
-  };
-
   render() {
     return (
       <Modal

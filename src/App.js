@@ -102,7 +102,7 @@ class App extends Component {
     if (this.props.useImageHosting === undefined) {
       return;
     }
-    const {url, name, isSmmsOpen, isQiniuyunOpen, isAliyunOpen} = this.props.useImageHosting;
+    const {url, name, isSmmsOpen, isAliyunOpen} = this.props.useImageHosting;
     if (name) {
       this.props.imageHosting.setHostingUrl(url);
       this.props.imageHosting.setHostingName(name);
@@ -114,9 +114,6 @@ class App extends Component {
     if (isAliyunOpen) {
       this.props.imageHosting.addImageHosting(IMAGE_HOSTING_NAMES.aliyun);
     }
-    if (isQiniuyunOpen) {
-      this.props.imageHosting.addImageHosting(IMAGE_HOSTING_NAMES.qiniuyun);
-    }
 
     // 第一次进入没有默认图床时
     if (window.localStorage.getItem(IMAGE_HOSTING_TYPE) === null) {
@@ -127,8 +124,6 @@ class App extends Component {
         type = IMAGE_HOSTING_NAMES.smms;
       } else if (isAliyunOpen) {
         type = IMAGE_HOSTING_NAMES.aliyun;
-      } else if (isQiniuyunOpen) {
-        type = IMAGE_HOSTING_NAMES.qiniuyun;
       }
       this.props.imageHosting.setType(type);
       window.localStorage.setItem(IMAGE_HOSTING_TYPE, type);
@@ -311,7 +306,6 @@ class App extends Component {
                   <section
                     id={LAYOUT_ID}
                     data-tool="mdnice编辑器"
-                    data-website="https://www.mdnice.com"
                     dangerouslySetInnerHTML={{
                       __html: parseHtml,
                     }}

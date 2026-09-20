@@ -13,7 +13,6 @@ import View from "../component/MenuLeft/View";
 
 import "./Navbar.css";
 
-// @inject("userInfo")
 @inject("view")
 @observer
 class Navbar extends Component {

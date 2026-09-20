@@ -8,7 +8,6 @@ import "./index.css";
 import App from "./App";
 
 import content from "./store/content";
-import userInfo from "./store/userInfo";
 import navbar from "./store/navbar";
 import dialog from "./store/dialog";
 import imageHosting from "./store/imageHosting";
@@ -46,14 +45,7 @@ class Lib extends Component {
       useImageHosting,
     };
     return (
-      <Provider
-        content={content}
-        userInfo={userInfo}
-        navbar={navbar}
-        dialog={dialog}
-        imageHosting={imageHosting}
-        view={view}
-      >
+      <Provider content={content} navbar={navbar} dialog={dialog} imageHosting={imageHosting} view={view}>
         {isPC() ? (
           <appContext.Provider value={appCtx}>
             <App defaultText={defaultText} onTextChange={onTextChange} useImageHosting={useImageHosting} />
@@ -62,14 +54,7 @@ class Lib extends Component {
           <Result
             icon={<SvgIcon name="smile" style={style.svgIcon} />}
             title="请使用 PC 端打开排版工具"
-            subTitle="更多 Markdown Nice 信息，请扫码关注公众号「编程如画」"
-            extra={
-              <img
-                alt=""
-                style={{width: "100%"}}
-                src="https://imgkr.cn-bj.ufileos.com/22cf98bd-3f85-45fc-9df7-e6b2808329d0.png"
-              />
-            }
+            subTitle="本工具需要较大屏幕，请在电脑浏览器中访问"
           />
         )}
       </Provider>
@@ -92,8 +77,7 @@ Lib.defaultProps = {
   useImageHosting: {
     url: "",
     name: "",
-    isSmmsOpen: true,
-    isQiniuyunOpen: true,
+    isSmmsOpen: false,
     isAliyunOpen: true,
   },
 };
@@ -106,7 +90,6 @@ Lib.propTypes = {
     url: PropTypes.string,
     name: PropTypes.string,
     isSmmsOpen: PropTypes.bool,
-    isQiniuyunOpen: PropTypes.bool,
     isAliyunOpen: PropTypes.bool,
   }),
 };

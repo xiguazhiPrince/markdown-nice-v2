@@ -13,7 +13,6 @@ export default `#nice {
 /* 一级标题 */
 #nice h1 {
   text-align:center;
-  background-image: 	url(http://img.xiaogangzai.cn/title_h1.png); 
   background-position: center top;
   background-repeat: no-repeat;
   background-size: 75px;
@@ -35,7 +34,6 @@ export default `#nice {
 #nice h2 {
   display:block;
   text-align:center;
-  background-image: 	url(http://img.xiaogangzai.cn/title.png); 
   background-position: center center;
   background-repeat: no-repeat;
   background-attachment: initial;
@@ -68,7 +66,6 @@ export default `#nice {
 /* 三级标题 */
 #nice h3:before {
   content: "";
-  background-image:url(http://img.xiaogangzai.cn/title_h2.png);
   background-size:100% 100%;
   background-repeat:no-repeat;
   display: inline-block;

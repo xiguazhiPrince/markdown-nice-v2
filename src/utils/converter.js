@@ -73,16 +73,6 @@ export const solveJuejinMath = () => {
   }
 };
 
-export const juejinSuffix = () => {
-  const suffix = document.createElement("p");
-  suffix.id = "nice-suffix-juejin-container";
-  suffix.className = "nice-suffix-juejin-container";
-  suffix.innerHTML = `本文使用 <a href="https://mdnice.com">mdnice</a> 排版`;
-
-  const element = document.getElementById(LAYOUT_ID);
-  element.appendChild(suffix);
-};
-
 export const solveHtml = () => {
   const element = document.getElementById(BOX_ID);
 
