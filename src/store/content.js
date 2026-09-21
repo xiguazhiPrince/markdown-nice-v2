@@ -10,7 +10,7 @@ import {
   STYLE_LABELS,
   normalizeTemplateNum,
 } from "../utils/constant";
-import {replaceStyle, addStyleLabel} from "../utils/helper";
+import {replaceStyle, addStyleLabel, refreshCardModeStyle} from "../utils/helper";
 import TEMPLATE from "../template/index";
 
 class Content {
@@ -35,6 +35,7 @@ class Content {
   setStyle = (style) => {
     this.style = style;
     replaceStyle(MARKDOWN_THEME_ID, style);
+    refreshCardModeStyle();
   };
 
   // 自定义样式
@@ -46,6 +47,7 @@ class Content {
     }
     this.style = window.localStorage.getItem(STYLE);
     replaceStyle(MARKDOWN_THEME_ID, this.style);
+    refreshCardModeStyle();
   };
 }
 
@@ -80,6 +82,7 @@ addStyleLabel(STYLE_LABELS);
 // 初始化整体主题
 replaceStyle(BASIC_THEME_ID, TEMPLATE.basic);
 replaceStyle(MARKDOWN_THEME_ID, store.style);
+refreshCardModeStyle();
 
 store.content = window.localStorage.getItem(CONTENT);
 

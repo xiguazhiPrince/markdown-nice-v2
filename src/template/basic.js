@@ -274,7 +274,7 @@ export default `/*默认样式，最佳实践*/
   line-height: 20px;
 }
 #nice .code-snippet__fix pre {
-  margin-bottom: 10px;
+  margin-bottom: 0px;
   margin-top: 0px;
 }
 #nice .code-snippet__fix pre {

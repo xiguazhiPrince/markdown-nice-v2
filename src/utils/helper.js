@@ -11,6 +11,8 @@ import markdownItImageFlow from "./markdown-it-imageflow";
 import highlightjs from "./langHighlight";
 import markdownItLiReplacer from "./markdown-it-li";
 import markdownItCard from "./markdown-it-card";
+import buildCardModeCss, {extractAccent} from "../template/card-mode";
+import {IS_CARD_MODE, MARKDOWN_THEME_ID, CARD_MODE_THEME_ID} from "./constant";
 
 export const queryParse = (search = window.location.search) => {
   if (!search) return {};
@@ -119,6 +121,15 @@ export const replaceStyle = (id, css) => {
   }
   const head = document.getElementsByTagName("head")[0];
   head.appendChild(style);
+};
+
+// 重新生成卡片骨架样式：强调色从当前主题 CSS 里提取，所以主题切换、
+// 自定义样式编辑之后都要调用它。开关关闭时写空串，等于没开过。
+export const refreshCardModeStyle = () => {
+  const isCardMode = window.localStorage.getItem(IS_CARD_MODE) === "true";
+  const themeStyle = document.getElementById(MARKDOWN_THEME_ID);
+  const themeCss = themeStyle ? themeStyle.innerText : "";
+  replaceStyle(CARD_MODE_THEME_ID, isCardMode ? buildCardModeCss(extractAccent(themeCss)) : "");
 };
 
 export const dateFormat = (date, fmt) => {

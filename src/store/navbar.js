@@ -8,11 +8,10 @@ import {
   IS_SYNC_SCROLL,
   IS_MAC_CODE,
   IS_CARD_MODE,
-  CARD_MODE_THEME_ID,
   normalizeTemplateNum,
 } from "../utils/constant";
 import TEMPLATE from "../template/index";
-import {replaceStyle} from "../utils/helper";
+import {replaceStyle, refreshCardModeStyle} from "../utils/helper";
 
 class Navbar {
   // 是否同步滚动
@@ -79,7 +78,7 @@ class Navbar {
     this.isCardMode = isCardMode;
     window.localStorage.setItem(IS_CARD_MODE, isCardMode);
     // 卡片骨架样式只在开关打开时注入，关闭时清空，对其它主题零影响
-    replaceStyle(CARD_MODE_THEME_ID, isCardMode ? TEMPLATE.cardMode : "");
+    refreshCardModeStyle();
   };
 }
 
@@ -129,7 +128,6 @@ if (store.codeNum !== 0) {
   }
 }
 
-// 初始化卡片模式
-replaceStyle(CARD_MODE_THEME_ID, store.isCardMode ? TEMPLATE.cardMode : "");
+// 卡片模式的样式初始化在 content.js（它先于本文件执行，且主题样式那时已经就位）
 
 export default store;

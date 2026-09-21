@@ -21,6 +21,7 @@
 "use strict";
 
 const path = require("path");
+const fs = require("fs");
 const Module = require("module");
 const babel = require("@babel/core");
 const MarkdownIt = require("markdown-it");
@@ -49,9 +50,18 @@ const defaultOf = (mod) => (mod && mod.__esModule ? mod.default : mod);
 const markdownItCard = defaultOf(loadSrc("src/utils/markdown-it-card.js"));
 const markdownItSpan = defaultOf(loadSrc("src/utils/markdown-it-span.js"));
 const markdownItLiReplacer = defaultOf(loadSrc("src/utils/markdown-it-li.js"));
-const cardModeCss = defaultOf(loadSrc("src/template/card-mode.js"));
+const cardModeMod = loadSrc("src/template/card-mode.js");
+const buildCardModeCss = defaultOf(cardModeMod);
+const {extractAccent} = cardModeMod;
+const cardModeCss = buildCardModeCss();
 const basicTheme = defaultOf(loadSrc("src/template/basic.js"));
 const warmWhite = defaultOf(loadSrc("src/template/markdown/warmWhite.js"));
+
+const THEME_DIR = path.join(ROOT, "src/template/markdown");
+const loadTheme = (name) => defaultOf(loadSrc("src/template/markdown/" + name + ".js"));
+
+// 默认兜底主色 #4a5bd6 对应的金句底色 / 徽章底色
+const DEFAULT_PUNCH_BG = /background:\s*rgba\(74,\s*91,\s*214,\s*0\.09\)/;
 
 // 复刻 helper.js 里两条解析链共同的部分（微信链多一个 removepre，与分卡无关）
 const buildParser = () => {
@@ -157,11 +167,11 @@ const inlineOne = (src) => juice.inlineContent(
 
 const jev = inlineOne("这就是 **Jev** 。\n");
 check("「这就是 **Jev** 。」的加粗没拿到金句底色",
-  !/background:\s*#fff8e8/.test(jev), (jev.match(/<strong[^>]*>/) || [])[0]);
+  !DEFAULT_PUNCH_BG.test(jev), (jev.match(/<strong[^>]*>/) || [])[0]);
 
 const real = inlineOne("**真正的金句**\n");
 check("真正的金句拿到了金句底色",
-  /background:\s*#fff8e8/.test(real), (real.match(/<strong[^>]*>/) || [])[0]);
+  DEFAULT_PUNCH_BG.test(real), (real.match(/<strong[^>]*>/) || [])[0]);
 
 group("分卡：边界情况");
 
@@ -220,11 +230,12 @@ const styleOf = (re) => {
   return m ? m[0] : "";
 };
 
-check("卡片盒子拿到 min-height", /min-height:\s*600px/.test(styleOf(/<section class="card"[^>]*>/)),
+check("卡片高度跟内容走（没有写死最小高度）",
+  !/min-height/.test(styleOf(/<section class="card"[^>]*>/)),
   styleOf(/<section class="card"[^>]*>/));
 check("卡片盒子拿到圆角", /border-radius:\s*14px/.test(styleOf(/<section class="card"[^>]*>/)));
 check("编号是真文本不是计数器", /class="card-no"[^>]*>01</.test(inlined));
-check("编号样式已内联", /background:\s*#eef1ff/.test(styleOf(/<section class="card-no"[^>]*>/)));
+check("编号样式已内联", /background:\s*rgba\(74,\s*91,\s*214,\s*0\.12\)/.test(styleOf(/<section class="card-no"[^>]*>/)));
 
 // 把两条 hr 分别拎出来判：带 .card-sep 的是分卡符（该藏），不带的是 *** 画的线（该留）
 const hrTags = inlined.match(/<hr[^>]*>/g) || [];
@@ -239,11 +250,58 @@ check("*** 的分割线没被藏掉",
 check("*** 的分割线拿到了线样式", ruleHrs.length === 1 && /border-top/.test(ruleHrs[0]), ruleHrs.join("\n"));
 
 check("金句 display:block 存活", /<strong[^>]*style="[^"]*display:\s*block/.test(inlined));
-check("金句拿到强调底色", /background:\s*#fff8e8/.test(styleOf(/<strong[^>]*style="[^"]*"/)));
+check("金句拿到强调底色", DEFAULT_PUNCH_BG.test(styleOf(/<strong[^>]*style="[^"]*"/)));
 check("结果面板不再被卡片模式改色（配色交给主题）",
   !/background:\s*#f2f7f4/.test(inlined) &&
     /background:\s*rgba\(0,\s*0,\s*0,\s*0\.05\)/.test(inlined),
   styleOf(/<blockquote[^>]*>/));
+
+// ---------------------------------------------------------------- 骨架配色
+
+group("骨架配色跟随主题主色（extractAccent）");
+
+const themeNames = fs
+  .readdirSync(THEME_DIR)
+  .filter((f) => f.endsWith(".js"))
+  .map((f) => f.replace(".js", ""))
+  .sort();
+
+const accents = {};
+let allValid = true;
+themeNames.forEach((name) => {
+  const accent = extractAccent(loadTheme(name));
+  accents[name] = accent;
+  if (!/^#[0-9a-f]{6}$/.test(accent)) {
+    allValid = false;
+  }
+});
+check("每个主题都能提取出 #rrggbb 主色（共 " + themeNames.length + " 个）",
+  allValid, JSON.stringify(accents));
+
+check("暖白 → 红 #cf4436", accents.warmWhite === "#cf4436", accents.warmWhite);
+check("暗紫 → 紫 #916dd5", accents.nightPurple === "#916dd5", accents.nightPurple);
+check("红 → 红 #f83929（主色在 h2 .content 的 border-left 上）",
+  accents.red === "#f83929", accents.red);
+check("水墨 → 中性灰（没有彩色时的退让）",
+  /^#([0-9a-f]{2})\1\1$/.test(accents.ink || ""), accents.ink);
+check("极简黑 → 中性灰（主色在 .multiquote-1 引用线上）",
+  /^#([0-9a-f]{2})\1\1$/.test(accents.extremeBlack || ""), accents.extremeBlack);
+
+const themedCss = buildCardModeCss("#cf4436");
+check("金句左边线用主题主色", /border-left:\s*3px solid #cf4436/.test(themedCss));
+check("编号徽章底色用主题主色的浅色调",
+  /background:\s*rgba\(207,\s*68,\s*54,\s*0\.12\)/.test(themedCss));
+check("卡片外框保持中性（白底浅灰描边，不跟主题变）",
+  /background:\s*#ffffff/.test(themedCss) && /border:\s*1px solid #e7e9ef/.test(themedCss));
+
+const themedInline = juice.inlineContent(
+  '<section id="nice">' + renderCard("**金句**\n") + "</section>",
+  basicTheme + warmWhite + themedCss,
+  {inlinePseudoElements: true, preserveImportant: true}
+);
+check("换主题后金句底色跟着换（juice 内联后仍存活）",
+  /background:\s*rgba\(207,\s*68,\s*54,\s*0\.09\)/.test(themedInline),
+  (themedInline.match(/<strong[^>]*>/) || [])[0]);
 
 // ---------------------------------------------------------------- 不越权
 
