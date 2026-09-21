@@ -116,10 +116,50 @@ const setext = renderCard("**金句在这**\n---\n下一张卡\n");
 check("被吃掉的 --- 已补回，切出 2 张卡", countCards(setext) === 2, setext);
 check("金句还原成普通段落（不再是 h2）", !/<h2>/.test(setext), setext);
 check("金句是干净的 p > strong（没混进 span）",
-  /<p><strong>金句在这<\/strong><\/p>/.test(setext), setext);
+  /<p><strong class="card-punch">金句在这<\/strong><\/p>/.test(setext), setext);
 
 const realHeading = renderCard("## 真标题\n\n**金句**\n---\n下一张\n");
 check("真标题的 span.content 没被误伤", /<h2><span class="prefix"><\/span><span class="content">真标题/.test(realHeading), realHeading);
+
+group("金句识别（必须靠 class，不能靠 :only-child）");
+
+const punch = (src) => renderCard(src);
+const hasPunch = (html) => /<strong class="card-punch"/.test(html);
+
+check("整段只有一处加粗 → 打上 card-punch",
+  hasPunch(punch("**这是金句**\n")), punch("**这是金句**\n"));
+check("金句后面拖空格也算",
+  hasPunch(punch("**这是金句** \n")), punch("**这是金句** \n"));
+check("金句里有嵌套强调也算",
+  hasPunch(punch("**这是*金句***\n")), punch("**这是*金句***\n"));
+
+// ↓ 这四条是回归重点：juice 的 :only-child 会把这几种误判成金句
+check("前面有文字 → 不是金句",
+  !hasPunch(punch("这就是 **Jev** 。\n")), punch("这就是 **Jev** 。\n"));
+check("后面有文字 → 不是金句",
+  !hasPunch(punch("**Jev** 是模型。\n")), punch("**Jev** 是模型。\n"));
+check("同段两处加粗 → 都不是金句",
+  !hasPunch(punch("第一款 **甲**，还有 **乙**，正文。\n")), punch("第一款 **甲**，还有 **乙**，正文。\n"));
+check("引用块里的加粗 → 不是金句（那是强调）",
+  !hasPunch(punch("> **结果：成功了**\n")), punch("> **结果：成功了**\n"));
+check("列表里的加粗 → 不是金句",
+  !hasPunch(punch("- **要点一**\n")), punch("- **要点一**\n"));
+
+group("金句：juice 内联后普通加粗不能变成金句（预览与粘贴必须一致）");
+
+const PUNCH_CSS = basicTheme + cardTheme;
+const inlineOne = (src) => juice.inlineContent(
+  '<section id="nice">' + renderCard(src) + "</section>", PUNCH_CSS,
+  {inlinePseudoElements: true, preserveImportant: true}
+);
+
+const jev = inlineOne("这就是 **Jev** 。\n");
+check("「这就是 **Jev** 。」的加粗没拿到金句底色",
+  !/background:\s*#fff8e8/.test(jev), (jev.match(/<strong[^>]*>/) || [])[0]);
+
+const real = inlineOne("**真正的金句**\n");
+check("真正的金句拿到了金句底色",
+  /background:\s*#fff8e8/.test(real), (real.match(/<strong[^>]*>/) || [])[0]);
 
 group("分卡：边界情况");
 
@@ -196,8 +236,8 @@ check("*** 的分割线没被藏掉",
   ruleHrs.length === 1 && !/display:\s*none/.test(ruleHrs[0]), ruleHrs.join("\n"));
 check("*** 的分割线拿到了线样式", ruleHrs.length === 1 && /border-top/.test(ruleHrs[0]), ruleHrs.join("\n"));
 
-check("金句 display:block 存活", /<strong style="[^"]*display:\s*block/.test(inlined));
-check("金句拿到强调底色", /background:\s*#fff8e8/.test(styleOf(/<strong style="[^"]*"/)));
+check("金句 display:block 存活", /<strong[^>]*style="[^"]*display:\s*block/.test(inlined));
+check("金句拿到强调底色", /background:\s*#fff8e8/.test(styleOf(/<strong[^>]*style="[^"]*"/)));
 check("结果面板拿到绿底", /background:\s*#f2f7f4/.test(inlined));
 check("正文 p 的 padding 被清掉（金句靠 margin 合并排版）",
   /<p style="[^"]*padding:\s*0/.test(inlined));

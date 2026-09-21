@@ -19,6 +19,7 @@ const DEFAULT_OPTIONS = {
   cardNoClass: "card-no",
   cardNumber: true, // 是否在每张卡片开头输出 01 这样的编号
   cardSepClass: "card-sep", // 分卡符本身的标记，卡片主题用它把分隔线藏掉
+  punchClass: "card-punch", // 金句（整段只有一处加粗）的标记
 };
 
 // 需要看 token.content 才知道有没有内容的块级 token
@@ -136,6 +137,71 @@ const makeUnsetextRule = () => {
   };
 };
 
+// 判断一个段落是不是「整段只有一处加粗」—— 也就是金句。
+const isWholeParagraphStrong = (inline) => {
+  if (!inline || inline.type !== "inline" || !inline.children) {
+    return false;
+  }
+
+  // 忽略纯空白的文本节点，这样 `**金句** ` 后面拖个空格也算
+  const kids = inline.children.filter((child) => !(child.type === "text" && child.content.trim() === ""));
+  if (kids.length < 3) {
+    return false;
+  }
+  if (kids[0].type !== "strong_open" || kids[kids.length - 1].type !== "strong_close") {
+    return false;
+  }
+
+  // 加粗必须罩住整段：中途 nesting 回到 0，就说明 strong 之外还有别的内容
+  // （比如 `**甲** 和 **乙**` 这种，首尾看着像，其实不是金句）
+  let depth = 0;
+  for (let i = 0; i < kids.length; i++) {
+    depth += kids[i].nesting;
+    if (depth === 0 && i < kids.length - 1) {
+      return false;
+    }
+  }
+  return depth === 0;
+};
+
+// 给金句打标记。
+//
+// 为什么不在 CSS 里用 `p > strong:only-child`：
+// juice 用的 cheerio/css-select 把 :only-child 实现成了 :only-of-type 的语义 ——
+// 它【不把文本节点算作兄弟节点】。于是 <p>这就是 <strong>Jev</strong> 。</p>
+// 在浏览器里不匹配（正确），在 juice 里却匹配上了，
+// 结果就是预览正常、粘进公众号后所有「整段只有一处加粗」的段落全变成金句面板。
+// 所以这里在 token 流里判定（信息是精确的），打成 class 交给 CSS。
+const makePunchlineRule = (options) => {
+  return function markPunchlines(state) {
+    if (!state.env || !state.env.cardMode) {
+      return;
+    }
+
+    const {tokens} = state;
+    let depth = 0;
+
+    for (let i = 0; i < tokens.length; i++) {
+      const token = tokens[i];
+
+      // depth 为 0 表示这是卡片的顶层段落，排除引用块 / 列表里的段落 ——
+      // 那些地方的加粗是强调，不该变成金句面板
+      if (token.type === "paragraph_open" && depth === 0) {
+        const inline = tokens[i + 1];
+        if (isWholeParagraphStrong(inline)) {
+          inline.children.filter((child) => child.type === "strong_open")[0].attrSet("class", options.punchClass);
+        }
+      }
+
+      if (token.nesting < 0) {
+        depth -= 1;
+      } else if (token.nesting > 0) {
+        depth += 1;
+      }
+    }
+  };
+};
+
 const makeCardOpen = (state, index, options) => {
   const token = new state.Token("card_open", "section", 1);
   token.block = true;
@@ -221,6 +287,7 @@ export default (md, opts) => {
   const options = md.utils.assign({}, DEFAULT_OPTIONS, opts);
 
   md.core.ruler.push("unsetext", makeUnsetextRule());
+  md.core.ruler.push("card_punchline", makePunchlineRule(options));
   md.core.ruler.push("card_split", makeCardRule(options));
 
   md.renderer.rules.card_open = (tokens, idx) => '<section class="' + tokens[idx].attrGet("class") + '">\n';

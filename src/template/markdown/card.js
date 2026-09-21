@@ -270,7 +270,12 @@ export default `/* 卡片主题 card
    金句：整段只有一处加粗的段落
    ========================================================= */
 
-#nice .card p > strong:only-child {
+/* 用 .card-punch 这个 class，不要用「p > strong:only-child」。
+   juice 的 cheerio/css-select 把 :only-child 当成 :only-of-type 实现，
+   不把文本节点算作兄弟节点 —— 于是「这就是 **Jev** 。」这种段落在浏览器里不匹配、
+   在 juice 里却匹配，预览正常但粘进公众号会整段变成金句面板。
+   class 由 markdown-it-card 插件在 token 流里打，判定是精确的。 */
+#nice .card strong.card-punch {
   display: block;
 
   margin: 18px 0 0;
