@@ -94,8 +94,8 @@ importers:
         specifier: 7.0.0-bridge.0
         version: 7.0.0-bridge.0(@babel/core@7.2.2)
       babel-eslint:
-        specifier: ^9.0.0
-        version: 9.0.0
+        specifier: ^10.1.0
+        version: 10.1.0(eslint@6.8.0)
       babel-jest:
         specifier: 23.6.0
         version: 23.6.0(babel-core@7.0.0-bridge.0(@babel/core@7.2.2))
@@ -146,7 +146,7 @@ importers:
         version: 6.10.0(eslint@6.8.0)
       eslint-config-react-app:
         specifier: ^3.0.7
-        version: 3.0.8(babel-eslint@9.0.0)(eslint-plugin-flowtype@2.50.1(eslint@6.8.0))(eslint-plugin-import@2.20.1(eslint@6.8.0))(eslint-plugin-jsx-a11y@6.2.3(eslint@6.8.0))(eslint-plugin-react@7.18.3(eslint@6.8.0))(eslint@6.8.0)
+        version: 3.0.8(babel-eslint@10.1.0(eslint@6.8.0))(eslint-plugin-flowtype@2.50.1(eslint@6.8.0))(eslint-plugin-import@2.20.1(eslint@6.8.0))(eslint-plugin-jsx-a11y@6.2.3(eslint@6.8.0))(eslint-plugin-react@7.18.3(eslint@6.8.0))(eslint@6.8.0)
       eslint-loader:
         specifier: ^2.1.1
         version: 2.2.1(eslint@6.8.0)(webpack@4.28.3)
@@ -1301,10 +1301,12 @@ packages:
     peerDependencies:
       '@babel/core': ^7.0.0-0
 
-  babel-eslint@9.0.0:
-    resolution: {integrity: sha512-itv1MwE3TMbY0QtNfeL7wzak1mV47Uy+n6HtSOO4Xd7rvmO+tsGQSgyOEEgo6Y2vHZKZphaoelNeSVj4vkLA1g==}
+  babel-eslint@10.1.0:
+    resolution: {integrity: sha512-ifWaTHQ0ce+448CYop8AdrQiBsGrnC+bMgfyKFdi6EsPLTAWG+QfyDeM6OH+FmWnKvEq5NnBMLvlBUPKQZoDSg==}
     engines: {node: '>=6'}
     deprecated: babel-eslint is now @babel/eslint-parser. This package will no longer receive updates.
+    peerDependencies:
+      eslint: '>= 4.12.1'
 
   babel-extract-comments@1.0.0:
     resolution: {integrity: sha512-qWWzi4TlddohA91bFwgt6zO/J0X+io7Qp184Fw0m2JYRSTZnJbFR8+07KmzudHCZgOiKRCrjhylwv9Xd8gfhVQ==}
@@ -2398,10 +2400,6 @@ packages:
 
   eslint-rule-composer@0.3.0:
     resolution: {integrity: sha512-bt+Sh8CtDmn2OajxvNO+BX7Wn4CIWMpTRm3MaiKPCQcnnlm0CS2mhui6QaoeQugs+3Kj2ESKEEGJUdVafwhiCg==}
-    engines: {node: '>=4.0.0'}
-
-  eslint-scope@3.7.1:
-    resolution: {integrity: sha512-ivpbtpUgg9SJS4TLjK7KdcDhqc/E3CGItsvQbBNLkNGUeMhd5qnJcryba/brESS+dg3vrLqPuc/UcS7jRJdN5A==}
     engines: {node: '>=4.0.0'}
 
   eslint-scope@4.0.3:
@@ -8156,14 +8154,15 @@ snapshots:
     dependencies:
       '@babel/core': 7.2.2
 
-  babel-eslint@9.0.0:
+  babel-eslint@10.1.0(eslint@6.8.0):
     dependencies:
       '@babel/code-frame': 7.8.3
       '@babel/parser': 7.8.6
       '@babel/traverse': 7.8.6
       '@babel/types': 7.8.6
-      eslint-scope: 3.7.1
+      eslint: 6.8.0
       eslint-visitor-keys: 1.1.0
+      resolve: 1.15.1
     transitivePeerDependencies:
       - supports-color
 
@@ -9479,9 +9478,9 @@ snapshots:
       eslint: 6.8.0
       get-stdin: 6.0.0
 
-  eslint-config-react-app@3.0.8(babel-eslint@9.0.0)(eslint-plugin-flowtype@2.50.1(eslint@6.8.0))(eslint-plugin-import@2.20.1(eslint@6.8.0))(eslint-plugin-jsx-a11y@6.2.3(eslint@6.8.0))(eslint-plugin-react@7.18.3(eslint@6.8.0))(eslint@6.8.0):
+  eslint-config-react-app@3.0.8(babel-eslint@10.1.0(eslint@6.8.0))(eslint-plugin-flowtype@2.50.1(eslint@6.8.0))(eslint-plugin-import@2.20.1(eslint@6.8.0))(eslint-plugin-jsx-a11y@6.2.3(eslint@6.8.0))(eslint-plugin-react@7.18.3(eslint@6.8.0))(eslint@6.8.0):
     dependencies:
-      babel-eslint: 9.0.0
+      babel-eslint: 10.1.0(eslint@6.8.0)
       confusing-browser-globals: 1.0.9
       eslint: 6.8.0
       eslint-plugin-flowtype: 2.50.1(eslint@6.8.0)
@@ -9583,11 +9582,6 @@ snapshots:
       string.prototype.matchall: 4.0.2
 
   eslint-rule-composer@0.3.0: {}
-
-  eslint-scope@3.7.1:
-    dependencies:
-      esrecurse: 4.2.1
-      estraverse: 4.3.0
 
   eslint-scope@4.0.3:
     dependencies:
