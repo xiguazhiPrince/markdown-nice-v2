@@ -17,7 +17,14 @@ import SearchBox from "./component/SearchBox";
 import "./App.css";
 import "./utils/mdMirror.css";
 
-import {LAYOUT_ID, BOX_ID, MJX_DATA_FORMULA, MJX_DATA_FORMULA_TYPE} from "./utils/constant";
+import {
+  LAYOUT_ID,
+  BOX_ID,
+  MJX_DATA_FORMULA,
+  MJX_DATA_FORMULA_TYPE,
+  TEMPLATE_OPTIONS,
+  CARD_THEME_ID,
+} from "./utils/constant";
 import {markdownParser, markdownParserWechat, updateMathjax} from "./utils/helper";
 import pluginCenter from "./utils/pluginCenter";
 import appContext from "./utils/appContext";
@@ -164,14 +171,19 @@ class App extends Component {
   }
 
   render() {
-    const {codeNum, previewType} = this.props.navbar;
+    const {codeNum, previewType, templateNum} = this.props.navbar;
     const {isEditAreaOpen, isPreviewAreaOpen, isStyleEditorOpen, isImmersiveEditing} = this.props.view;
     const {isSearchOpen} = this.props.dialog;
 
+    // 卡片主题需要把每个 --- 区间包成 <section class="card">，靠 env 开关让插件
+    // 只在这个主题下生效；其它主题下产物与改动前完全一致
+    const currentTemplate = TEMPLATE_OPTIONS[templateNum];
+    const env = {cardMode: !!currentTemplate && currentTemplate.id === CARD_THEME_ID};
+
     const parseHtml =
       codeNum === 0
-        ? markdownParserWechat.render(this.props.content.content)
-        : markdownParser.render(this.props.content.content);
+        ? markdownParserWechat.render(this.props.content.content, env)
+        : markdownParser.render(this.props.content.content, env);
 
     const mdEditingClass = classnames({
       "nice-md-editing": !isImmersiveEditing,

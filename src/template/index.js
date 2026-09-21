@@ -21,6 +21,7 @@ import warmWhite from "./markdown/warmWhite";
 
 import nightPurple from "./markdown/nightPurple";
 import extremeBlack from "./markdown/extremeBlack";
+import card from "./markdown/card";
 
 import content from "./content.md";
 
@@ -65,6 +66,7 @@ export default {
     warmWhite,
     nightPurple,
     extremeBlack,
+    card,
   },
   code: {
     atomOneDark,

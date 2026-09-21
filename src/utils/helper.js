@@ -10,6 +10,7 @@ import markdownItLinkfoot from "./markdown-it-linkfoot";
 import markdownItImageFlow from "./markdown-it-imageflow";
 import highlightjs from "./langHighlight";
 import markdownItLiReplacer from "./markdown-it-li";
+import markdownItCard from "./markdown-it-card";
 
 export const queryParse = (search = window.location.search) => {
   if (!search) return {};
@@ -68,7 +69,8 @@ markdownParserWechat
   .use(markdownItImplicitFigures, {figcaption: true}) // 图示
   .use(markdownItDeflist) // 定义列表
   .use(markdownItLiReplacer) // li 标签中加入 p 标签
-  .use(markdownItImageFlow); // 横屏移动插件
+  .use(markdownItImageFlow) // 横屏移动插件
+  .use(markdownItCard, {cardNumber: true}); // 卡片主题分卡（仅在卡片主题下生效）
 
 // 普通解析器，代码高亮用highlight
 export const markdownParser = new MarkdownIt({
@@ -104,7 +106,8 @@ markdownParser
   .use(markdownItImplicitFigures, {figcaption: true}) // 图示
   .use(markdownItDeflist) // 定义列表
   .use(markdownItLiReplacer) // li 标签中加入 p 标签
-  .use(markdownItImageFlow); // 横屏移动插件
+  .use(markdownItImageFlow) // 横屏移动插件
+  .use(markdownItCard, {cardNumber: true}); // 卡片主题分卡（仅在卡片主题下生效）
 
 export const replaceStyle = (id, css) => {
   const style = document.getElementById(id);

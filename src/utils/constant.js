@@ -16,6 +16,10 @@ export const FONT_THEME_ID = "font-theme";
 export const LAYOUT_ID = "nice";
 export const BOX_ID = "nice-rich-text-box";
 
+// 卡片主题：需要 markdown-it-card 插件配合（按 --- 把内容包成卡片），
+// 这个 id 是 App.js 里判断是否开启卡片解析的依据
+export const CARD_THEME_ID = "card";
+
 export const RIGHT_SYMBOL = "✔️";
 export const EXPORT_FILENAME_SUFFIX = ".md";
 
@@ -132,6 +136,12 @@ export const TEMPLATE_OPTIONS = [
     id: "simple",
     name: "简",
     author: "aco",
+  },
+  {
+    id: "card",
+    name: "卡片",
+    author: "自定义",
+    isNew: true,
   },
   {
     id: "custom",
