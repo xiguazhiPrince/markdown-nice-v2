@@ -21,7 +21,6 @@ import warmWhite from "./markdown/warmWhite";
 
 import nightPurple from "./markdown/nightPurple";
 import extremeBlack from "./markdown/extremeBlack";
-import card from "./markdown/card";
 
 import content from "./content.md";
 
@@ -40,9 +39,11 @@ import macVs2015 from "./macCode/macVs2015";
 import macXcode from "./macCode/macXcode";
 
 import basic from "./basic";
+import cardMode from "./card-mode";
 
 export default {
   basic,
+  cardMode,
   style: {
     blue,
     blueMountain,
@@ -66,7 +67,6 @@ export default {
     warmWhite,
     nightPurple,
     extremeBlack,
-    card,
   },
   code: {
     atomOneDark,

@@ -1,17 +1,18 @@
 /**
- * 卡片主题回归测试。
+ * 卡片模式回归测试。
  *
- * 覆盖两块，这两块都出过问题、且都不容易靠眼睛发现：
+ * 覆盖三块，这些都出过问题、且不容易靠眼睛发现：
  *
  *   1. 分卡逻辑（src/utils/markdown-it-card.js）—— 靠操作 markdown-it 的 token 流实现，
  *      跟 markdownItSpan / markdownItLi / markdownItLinkfoot 处在同一条 core 链上，
  *      改动任何一个插件都可能悄悄影响它。
- *   2. 主题 CSS 经 juice 内联后是否还活着（src/template/markdown/card.js）——
+ *   2. 卡片骨架 CSS 经 juice 内联后是否还活着（src/template/card-mode.js）——
  *      juice 对不支持的选择器是【静默丢弃】的，预览里好好的，粘进公众号才没样式。
+ *   3. 卡片模式不越权：配色/排版必须仍然由所选主题决定。
  *
  * 用法：
- *   yarn test:card          正常跑
- *   yarn test:card -v       额外打印渲染出的 HTML，便于排查
+ *   pnpm test:card          正常跑
+ *   pnpm test:card -v       额外打印渲染出的 HTML，便于排查
  *
  * 注意：仓库整体的 jest 配置是坏的（package.json 里有 CRA 不支持的选项），
  * 所以这里做成独立脚本，不依赖测试框架。
@@ -48,8 +49,9 @@ const defaultOf = (mod) => (mod && mod.__esModule ? mod.default : mod);
 const markdownItCard = defaultOf(loadSrc("src/utils/markdown-it-card.js"));
 const markdownItSpan = defaultOf(loadSrc("src/utils/markdown-it-span.js"));
 const markdownItLiReplacer = defaultOf(loadSrc("src/utils/markdown-it-li.js"));
-const cardTheme = defaultOf(loadSrc("src/template/markdown/card.js"));
+const cardModeCss = defaultOf(loadSrc("src/template/card-mode.js"));
 const basicTheme = defaultOf(loadSrc("src/template/basic.js"));
+const warmWhite = defaultOf(loadSrc("src/template/markdown/warmWhite.js"));
 
 // 复刻 helper.js 里两条解析链共同的部分（微信链多一个 removepre，与分卡无关）
 const buildParser = () => {
@@ -147,7 +149,7 @@ check("列表里的加粗 → 不是金句",
 
 group("金句：juice 内联后普通加粗不能变成金句（预览与粘贴必须一致）");
 
-const PUNCH_CSS = basicTheme + cardTheme;
+const PUNCH_CSS = basicTheme + cardModeCss;
 const inlineOne = (src) => juice.inlineContent(
   '<section id="nice">' + renderCard(src) + "</section>", PUNCH_CSS,
   {inlinePseudoElements: true, preserveImportant: true}
@@ -209,7 +211,7 @@ const SAMPLE = [
 
 const inlined = juice.inlineContent(
   '<section id="nice">' + renderCard(SAMPLE) + "</section>",
-  basicTheme + cardTheme,
+  basicTheme + cardModeCss,
   {inlinePseudoElements: true, preserveImportant: true}
 );
 
@@ -238,9 +240,42 @@ check("*** 的分割线拿到了线样式", ruleHrs.length === 1 && /border-top/
 
 check("金句 display:block 存活", /<strong[^>]*style="[^"]*display:\s*block/.test(inlined));
 check("金句拿到强调底色", /background:\s*#fff8e8/.test(styleOf(/<strong[^>]*style="[^"]*"/)));
-check("结果面板拿到绿底", /background:\s*#f2f7f4/.test(inlined));
-check("正文 p 的 padding 被清掉（金句靠 margin 合并排版）",
-  /<p style="[^"]*padding:\s*0/.test(inlined));
+check("结果面板不再被卡片模式改色（配色交给主题）",
+  !/background:\s*#f2f7f4/.test(inlined) &&
+    /background:\s*rgba\(0,\s*0,\s*0,\s*0\.05\)/.test(inlined),
+  styleOf(/<blockquote[^>]*>/));
+
+// ---------------------------------------------------------------- 不越权
+
+group("卡片模式不越权：配色/排版仍由所选主题决定");
+
+const themeOnly = (src) =>
+  juice.inlineContent('<section id="nice">' + renderCard(src) + "</section>", basicTheme + warmWhite, {
+    inlinePseudoElements: true,
+    preserveImportant: true,
+  });
+const themeAndCard = (src) =>
+  juice.inlineContent(
+    '<section id="nice">' + renderCard(src) + "</section>",
+    basicTheme + warmWhite + cardModeCss,
+    {inlinePseudoElements: true, preserveImportant: true}
+  );
+
+const openTag = (html, tag) => (html.match(new RegExp("<" + tag + "[ >][^>]*>")) || [""])[0];
+// 特意让 p 不是卡片最后一个子元素：骨架会把最后一个子元素的 margin-bottom 清零
+// （#nice .card > *:last-child），那属于骨架职责，不在这条断言里算「越权」
+const TITLED = "## 标题\n\n正文。\n\n> 引用\n";
+
+check(
+  "标题的样式与只用主题时完全一致",
+  openTag(themeOnly(TITLED), "h2") === openTag(themeAndCard(TITLED), "h2"),
+  openTag(themeAndCard(TITLED), "h2")
+);
+check(
+  "正文的样式与只用主题时完全一致",
+  openTag(themeOnly(TITLED), "p") === openTag(themeAndCard(TITLED), "p"),
+  openTag(themeAndCard(TITLED), "p")
+);
 
 if (VERBOSE) {
   console.log("\n---------------- 渲染结果 ----------------");

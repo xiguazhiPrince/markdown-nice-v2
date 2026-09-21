@@ -8,6 +8,7 @@ import {
   MARKDOWN_THEME_ID,
   BASIC_THEME_ID,
   STYLE_LABELS,
+  normalizeTemplateNum,
 } from "../utils/constant";
 import {replaceStyle, addStyleLabel} from "../utils/helper";
 import TEMPLATE from "../template/index";
@@ -58,7 +59,7 @@ if (!window.localStorage.getItem(STYLE)) {
   window.localStorage.setItem(STYLE, TEMPLATE.style.custom);
 }
 
-const templateNum = parseInt(window.localStorage.getItem(TEMPLATE_NUM), 10);
+const templateNum = normalizeTemplateNum(parseInt(window.localStorage.getItem(TEMPLATE_NUM), 10));
 
 // 用于处理刷新后的信息持久化
 // 属于自定义主题则从localstorage中读数据

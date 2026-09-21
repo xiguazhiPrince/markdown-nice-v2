@@ -70,7 +70,7 @@ markdownParserWechat
   .use(markdownItDeflist) // 定义列表
   .use(markdownItLiReplacer) // li 标签中加入 p 标签
   .use(markdownItImageFlow) // 横屏移动插件
-  .use(markdownItCard, {cardNumber: true}); // 卡片主题分卡（仅在卡片主题下生效）
+  .use(markdownItCard, {cardNumber: true}); // 卡片模式分卡（仅在卡片模式开启时生效）
 
 // 普通解析器，代码高亮用highlight
 export const markdownParser = new MarkdownIt({
@@ -107,7 +107,7 @@ markdownParser
   .use(markdownItDeflist) // 定义列表
   .use(markdownItLiReplacer) // li 标签中加入 p 标签
   .use(markdownItImageFlow) // 横屏移动插件
-  .use(markdownItCard, {cardNumber: true}); // 卡片主题分卡（仅在卡片主题下生效）
+  .use(markdownItCard, {cardNumber: true}); // 卡片模式分卡（仅在卡片模式开启时生效）
 
 export const replaceStyle = (id, css) => {
   const style = document.getElementById(id);

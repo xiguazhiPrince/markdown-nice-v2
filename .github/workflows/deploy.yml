@@ -27,19 +27,25 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           # The build needs Node 17+ for --openssl-legacy-provider, which webpack 4
           # requires because it hashes with md4 (dropped from OpenSSL 3).
           node-version: 22
-          cache: yarn
+          # 仓库根的 .npmrc 里 node-linker=hoisted 让 CI 也用扁平布局
+          cache: pnpm
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Build
-        run: yarn build
+        run: pnpm build
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

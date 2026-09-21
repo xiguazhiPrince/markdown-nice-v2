@@ -7,6 +7,9 @@ import {
   PREVIEW_TYPE,
   IS_SYNC_SCROLL,
   IS_MAC_CODE,
+  IS_CARD_MODE,
+  CARD_MODE_THEME_ID,
+  normalizeTemplateNum,
 } from "../utils/constant";
 import TEMPLATE from "../template/index";
 import {replaceStyle} from "../utils/helper";
@@ -26,6 +29,9 @@ class Navbar {
 
   // 预览类型
   @observable previewType;
+
+  // 卡片模式：按 --- 把内容包成卡片，与主题选择无关
+  @observable isCardMode = false;
 
   @action
   setSyncScroll = (isSyncScroll) => {
@@ -67,6 +73,14 @@ class Navbar {
     this.previewType = previewType;
     window.localStorage.setItem(PREVIEW_TYPE, previewType);
   };
+
+  @action
+  setCardMode = (isCardMode) => {
+    this.isCardMode = isCardMode;
+    window.localStorage.setItem(IS_CARD_MODE, isCardMode);
+    // 卡片骨架样式只在开关打开时注入，关闭时清空，对其它主题零影响
+    replaceStyle(CARD_MODE_THEME_ID, isCardMode ? TEMPLATE.cardMode : "");
+  };
 }
 
 const store = new Navbar();
@@ -93,12 +107,17 @@ if (!window.localStorage.getItem(IS_MAC_CODE)) {
   window.localStorage.setItem(IS_MAC_CODE, true);
 }
 
+if (!window.localStorage.getItem(IS_CARD_MODE)) {
+  window.localStorage.setItem(IS_CARD_MODE, false);
+}
+
 // 获取之前选择的主题状态
-store.templateNum = parseInt(window.localStorage.getItem(TEMPLATE_NUM), 10);
+store.templateNum = normalizeTemplateNum(parseInt(window.localStorage.getItem(TEMPLATE_NUM), 10));
 store.codeNum = parseInt(window.localStorage.getItem(CODE_NUM), 10);
 store.previewType = window.localStorage.getItem(PREVIEW_TYPE);
 store.isSyncScroll = window.localStorage.getItem(IS_SYNC_SCROLL) === "true";
 store.isMacCode = window.localStorage.getItem(IS_MAC_CODE) === "true";
+store.isCardMode = window.localStorage.getItem(IS_CARD_MODE) === "true";
 
 // 初始化代码主题
 const {macId, id} = CODE_OPTIONS[store.codeNum];
@@ -109,5 +128,8 @@ if (store.codeNum !== 0) {
     replaceStyle(CODE_THEME_ID, TEMPLATE.code[id]);
   }
 }
+
+// 初始化卡片模式
+replaceStyle(CARD_MODE_THEME_ID, store.isCardMode ? TEMPLATE.cardMode : "");
 
 export default store;

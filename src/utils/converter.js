@@ -7,6 +7,7 @@ import {
   LAYOUT_ID,
   BOX_ID,
   FONT_THEME_ID,
+  CARD_MODE_THEME_ID,
   MJX_DATA_FORMULA,
 } from "./constant";
 
@@ -91,9 +92,12 @@ export const solveHtml = () => {
   const markdownStyle = document.getElementById(MARKDOWN_THEME_ID).innerText;
   const codeStyle = document.getElementById(CODE_THEME_ID).innerText;
   const fontStyle = document.getElementById(FONT_THEME_ID).innerText;
+  // 卡片模式关闭时这个标签是空的；开着时放最末，让卡片骨架在粘贴结果里存活，
+  // 且与主题规则打平时由卡片骨架胜出
+  const cardModeStyle = document.getElementById(CARD_MODE_THEME_ID).innerText;
   let res = "";
   try {
-    res = juice.inlineContent(html, basicStyle + markdownStyle + codeStyle + fontStyle, {
+    res = juice.inlineContent(html, basicStyle + markdownStyle + codeStyle + fontStyle + cardModeStyle, {
       inlinePseudoElements: true,
       preserveImportant: true,
     });

@@ -31,8 +31,13 @@ class Theme extends React.Component {
     this.props.view.setStyleEditorOpen(!isStyleEditorOpen);
   };
 
+  toggleCardMode = () => {
+    const {isCardMode} = this.props.navbar;
+    this.props.navbar.setCardMode(!isCardMode);
+  };
+
   render() {
-    const {templateNum} = this.props.navbar;
+    const {templateNum, isCardMode} = this.props.navbar;
 
     const mdMenu = (
       <Menu onClick={this.changeTemplate}>
@@ -51,6 +56,14 @@ class Theme extends React.Component {
           </Menu.Item>
         ))}
         <Menu.Divider />
+        <li className="nice-themeselect-menu-item">
+          <div id="nice-menu-card-mode" className="nice-themeselect-theme-item" onClick={this.toggleCardMode}>
+            <span>
+              <span className="nice-themeselect-theme-item-flag">{isCardMode && <span>{RIGHT_SYMBOL}</span>}</span>
+              <span className="nice-themeselect-theme-item-name">卡片模式</span>
+            </span>
+          </div>
+        </li>
         <li className="nice-themeselect-menu-item">
           <div id="nice-menu-view-css" className="nice-themeselect-theme-item" onClick={this.toggleStyleEditor}>
             <span>

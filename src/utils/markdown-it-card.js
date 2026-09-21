@@ -1,4 +1,4 @@
-// 卡片主题的分卡插件。
+// 卡片模式的分卡插件。
 //
 // 约定：顶层（不在引用 / 列表里）的 --- 是一张卡片的结束符，内容写在 --- 之前。
 //
@@ -8,7 +8,7 @@
 //      并把被吃掉的 hr 补回来。
 //   2. 按顶层 hr 把 token 流切成若干区间，每段包进 <section class="card">。
 //
-// 插件通过 state.env.cardMode 自我门禁：其它主题下 env 里没有这个标记，
+// 插件通过 state.env.cardMode 自我门禁：卡片模式关闭时 env 里没有这个标记，
 // 两个规则都直接返回，产物与原生 markdown-it 完全一致。
 //
 // 编号（01 / 02…）必须是真实文本节点：CSS 计数器会被 juice 破坏
@@ -18,7 +18,7 @@ const DEFAULT_OPTIONS = {
   cardClass: "card",
   cardNoClass: "card-no",
   cardNumber: true, // 是否在每张卡片开头输出 01 这样的编号
-  cardSepClass: "card-sep", // 分卡符本身的标记，卡片主题用它把分隔线藏掉
+  cardSepClass: "card-sep", // 分卡符本身的标记，卡片模式的 CSS 用它把分隔线藏掉
   punchClass: "card-punch", // 金句（整段只有一处加粗）的标记
 };
 
@@ -233,7 +233,7 @@ const makeCardRule = (options) => {
     const {tokens} = state;
     const splits = collectTopLevelHr(tokens);
 
-    // 给分卡符本身打个标记：保留它在 DOM 里（不删），由卡片主题的 CSS 藏掉。
+    // 给分卡符本身打个标记：保留它在 DOM 里（不删），由卡片模式的 CSS 藏掉。
     // 不能直接删也不能靠 CSS 选择器区分 —— 渲染成 <hr> 之后，
     // *** 和 ___ 产出的分割线跟它长得一模一样。
     splits.forEach((i) => tokens[i].attrSet("class", options.cardSepClass));

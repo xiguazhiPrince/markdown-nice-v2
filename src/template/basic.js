@@ -389,10 +389,4 @@ export default `/*默认样式，最佳实践*/
 #nice .nice-suffix-juejin-container {
   margin-top: 20px !important;
 }
-
-/* 卡片主题的编号。markdown-it-card 插件只在卡片主题下产出 .card-no，
-   这里默认藏掉纯属兜底；卡片主题会用同特异性的规则把它显示出来 */
-#nice .card-no {
-  display: none;
-}
 `;

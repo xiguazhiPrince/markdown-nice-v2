@@ -12,5 +12,5 @@ logo.png
 main.js
 package.json
 package-lock.json
-yarn.lock
+pnpm-lock.yaml
 .npmignore

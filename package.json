@@ -21,7 +21,7 @@
     "test:card": "node scripts/test-card.js",
     "analyze": "source-map-explorer build/static/js/*.js",
     "lint": "eslint src --ext ts,tsx,js --fix",
-    "publish:npm": "cross-env NODE_ENV=production && rm -rf lib && mkdir lib && cross-env BABEL_ENV=production npx babel src --out-dir lib --copy-files"
+    "publish:npm": "cross-env NODE_ENV=production && rm -rf lib && mkdir lib && cross-env BABEL_ENV=production pnpm exec babel src --out-dir lib --copy-files"
   },
   "dependencies": {
     "@sitdown/juejin": "^1.1.1",
@@ -225,6 +225,16 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "husky"
+    ],
+    "ignoredBuiltDependencies": [
+      "core-js",
+      "ejs",
+      "fsevents"
+    ]
   },
   "lint-staged": {
     "src/**/*.{jsx,txs,ts,js,json}": [

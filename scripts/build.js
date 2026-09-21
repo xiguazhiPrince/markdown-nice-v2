@@ -31,7 +31,9 @@ const printBuildError = require('react-dev-utils/printBuildError');
 const measureFileSizesBeforeBuild =
   FileSizeReporter.measureFileSizesBeforeBuild;
 const printFileSizesAfterBuild = FileSizeReporter.printFileSizesAfterBuild;
-const useYarn = fs.existsSync(paths.yarnLockFile);
+// react-dev-utils 的部署提示只分 yarn / npm 两种文案，统一走 npm 文案；
+// 本项目实际用 pnpm（命令风格与 npm 一致），不再检测 yarn.lock
+const useYarn = false;
 
 // These sizes are pretty large. We'll warn for bundles exceeding them.
 const WARN_AFTER_BUNDLE_GZIP_SIZE = 512 * 1024;

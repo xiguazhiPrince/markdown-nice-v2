@@ -15,7 +15,6 @@ process.on('unhandledRejection', err => {
 require('../config/env');
 
 
-const fs = require('fs');
 const chalk = require('react-dev-utils/chalk');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
@@ -32,7 +31,9 @@ const paths = require('../config/paths');
 const configFactory = require('../config/webpack.config');
 const createDevServerConfig = require('../config/webpackDevServer.config');
 
-const useYarn = fs.existsSync(paths.yarnLockFile);
+// react-dev-utils 的启动提示只分 yarn / npm 两种文案，统一走 npm 文案；
+// 本项目实际用 pnpm（命令风格与 npm 一致），不再检测 yarn.lock
+const useYarn = false;
 const isInteractive = process.stdout.isTTY;
 
 // Warn and crash if required files are missing
